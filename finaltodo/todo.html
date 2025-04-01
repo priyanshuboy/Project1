@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO APP!</title>
+    <link rel="stylesheet" href="todo.css">
+</head>
+<body>
+    <div class="space">
+        <div class="top">
+            <h1 style="margin-bottom: 20px; color: aliceblue;">TODO APP!</h1>
+        </div>
+        <div class="input-container">
+            <input type="text" placeholder="Add your todo..." id="todoInput">
+            <button id="button" onclick="Addtodo()">ADD</button>
+            <div id="todoList"></div>  </div>
+        </div>
+    </div>
+    <script>
+        var i = 1;
+        let editItemId = null;
+    
+        function Addtodo() {
+            const inputField = document.getElementById("todoInput");
+            const Fetchdata = inputField.value;
+    
+            if (!Fetchdata.trim()) {
+                return alert("input is empty!");
+            }
+    
+            const Newdiv = document.createElement("div");
+            Newdiv.innerHTML = `<div class="todo-text"> ${i}. ${Fetchdata} </div> <button class="edit-button" onclick="onEdit(this)">Edit</button> <button class="delete-button" onclick="Ondelete(this)">Delete</button>`;
+    
+            document.getElementById("todoList").appendChild(Newdiv);
+    
+            i++;
+        }
+    
+        function Ondelete(documentElement) {
+            documentElement.parentElement.remove();
+            i--;
+        }
+    
+        function onEdit(editButton) {
+            const todoDiv = editButton.parentElement;
+            const todoTextElement = todoDiv.querySelector(".todo-text");
+            const currentText = todoTextElement.textContent;
+    
+            editItemId = todoDiv;
+    
+            todoTextElement.innerHTML = `<input type="text" class="edit-input" value="${currentText}"> <button class="save-button" onclick="saveEdit()">Save</button>`;
+        }
+    
+        function saveEdit() {
+            if (!editItemId) return;
+    
+            const inputElement = editItemId.querySelector(".edit-input");
+            const newText = inputElement.value;
+    
+            if (newText.trim()) {
+                editItemId.querySelector(".todo-text").textContent = newText;
+                editItemId.innerHTML = `<div class="todo-text"> ${editItemId.querySelector(".todo-text").textContent} </div> <button class="edit-button" onclick="onEdit(this)">Edit</button> <button class="delete-button" onclick="Ondelete(this)">Delete</button>`;
+            } else {
+                alert("Input cannot be empty!");
+            }
+    
+            editItemId = null;
+        }
+    </script>
+</body>
+</html>
